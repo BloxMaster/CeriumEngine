@@ -5,7 +5,7 @@
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+	   http://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -99,7 +99,7 @@ namespace CeriumEngine {
 			Iterations = flips;
 		}
 
-		SimStepInfluence = (100.0 / Iterations);
+		SimStepInfluence = static_cast<float>((100.0 / Iterations));
 		for (int i = 0; i < Iterations; i++) {
 			// Keep flipping coins:
 
@@ -118,13 +118,13 @@ namespace CeriumEngine {
 
 			// Before we get into the matching stuff, update our 'distance'
 			// traveled along our algo:
-			SimPercent = ((Iterations - i) / Iterations);
+			SimPercent = ((static_cast<float>(Iterations) - i) / Iterations);
 
 			if (NeutralToss == StartingToss == PreferredToss) {
 				// Both bias coins and our "fair" coin matched.
 				// Move towards neutral if in settings.
 				if (neutralBiasCounted == true) {
-					currentBias = std::lerp(currentBias, 0.5, 0.5);
+					currentBias = static_cast<float>(std::lerp(currentBias, 0.5, 0.5));
 				}
 				ConfirmedToss = NeutralToss;
 			}
@@ -133,7 +133,7 @@ namespace CeriumEngine {
 				// No match with either bias coin.
 				// Move towards neutral if in settings.
 				if (neutralBiasCounted == true) {
-					currentBias = std::lerp(currentBias, 0.5, 0.5);
+					currentBias = static_cast<float>(std::lerp(currentBias, 0.5, 0.5));
 				}
 				ConfirmedToss = NeutralToss;
 			}
@@ -147,19 +147,19 @@ namespace CeriumEngine {
 					// far along the simulation we are (or how many loops have gone
 					// by, more specifically. This is to make starting influence weaker
 					// the further from the start. It's controlled by an optional bool.
-					currentBias = std::lerp(currentBias, (std::lerp(startingBias, currentBias, SimPercent)), 0.5);
+					currentBias = static_cast<float>(std::lerp(currentBias, (std::lerp(startingBias, currentBias, SimPercent)), 0.5));
 				}
 				else
 				{
 					// Don't do that fancy stuff; lerp off of the full starting bias, as usual.
-					currentBias = std::lerp(currentBias, startingBias, SimPercent);
+					currentBias = static_cast<float>(std::lerp(currentBias, startingBias, SimPercent));
 				}
 				ConfirmedToss = StartingToss;
 			}
 
 			if (NeutralToss != StartingToss && NeutralToss == PreferredToss) {
 				// Match with preferred bias coin.
-				currentBias = std::lerp(currentBias, targetBias, 0.5);
+				currentBias = static_cast<float>(std::lerp(currentBias, targetBias, 0.5));
 				ConfirmedToss = PreferredToss;
 			}
 
@@ -176,7 +176,7 @@ namespace CeriumEngine {
 			// Finally, if our bias matches the targeted bias
 			// and the settings want us to stop there:
 			if (endAtTarget == true) {
-				if (approximatelyEqual(currentBias, targetBias, 0.001) == true) {
+				if (approximatelyEqual(currentBias, targetBias, 0.0001f)) {
 					// Break out of the coin flips, just return.
 					break;
 				}

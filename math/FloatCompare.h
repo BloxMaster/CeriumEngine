@@ -5,7 +5,7 @@
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+	   http://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,17 +14,23 @@
    limitations under the License.
 */
 #pragma once
+#ifdef COMPARE_AS_INT
+#include "compareasint.cpp"
+#endif
 #include <cmath>
 #include <random>
 #include <functional>
 
-auto approximatelyEqual(float a, float b, float epsilon)
+static bool approximatelyEqual(float a, float b, float epsilon)
 {
 	return fabs(a - b) <= ((fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
 }
 
 static	bool essentiallyEqual(float a, float b, float epsilon)
 {
+#ifdef COMPARE_AS_INT
+	return AlmostEqual2sComplement(a, b, epsilon);
+#endif
 	return fabs(a - b) <= ((fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * epsilon);
 }
 
